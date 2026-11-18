@@ -1,0 +1,10 @@
+# Python 3.10 recommended
+sports2d==0.8.30          # RTMPose-m + Pose2Sim pipeline
+mediapipe>=0.10.14        # BlazePose (Tasks API)
+numpy<2.0                 # required by Sports2D
+pandas>=1.5,<2.3
+scipy
+matplotlib
+opencv-python!=4.11.*
+streamlit
+imageio-ffmpeg            # bundled ffmpeg for browser-playable video

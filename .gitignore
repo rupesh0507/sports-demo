@@ -1,0 +1,56 @@
+# ── Media: never commit videos, frames or images ─────────────────────
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+*.ogv
+*.m4v
+*.wmv
+*.flv
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.webp
+
+# ── Model weights (auto-downloaded on first run) ─────────────────────
+*.task
+*.onnx
+*.pth
+
+# ── Generated outputs ────────────────────────────────────────────────
+Sports2D_output/
+mediapipe_output/
+mediapipe_test_output/
+multiperson_output/
+robust_output/
+screening_output/
+hip_extension_output/
+hip_extension_validation/
+frame_samples/
+sprint1_testset/*
+!sprint1_testset/*.py
+*.c3d
+*.trc
+*.mot
+*.log
+
+# ── Redundant backups / scratch data ─────────────────────────────────
+*_backup*.py
+coverr_candidates.json
+
+# ── Python / environment ─────────────────────────────────────────────
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# ── OS / editor ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

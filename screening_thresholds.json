@@ -1,0 +1,69 @@
+{
+  "_metadata": {
+    "schema_version": "1.0",
+    "status": "PROVISIONAL_NOT_VALIDATED",
+    "warning": "All thresholds are PROVISIONAL PLACEHOLDERS derived from the SME brief. Real NFL-level cutoffs require combine data, scout-validated ground truth, and statistical power analysis. Do NOT use these values for actual athlete selection decisions.",
+    "last_updated": "2026-06-23",
+    "validation_target": "NFL combine data + scout-validated ground truth required before any threshold is treated as operational",
+    "how_to_edit": "Change numeric values in this file only. Do not edit screening_scaffold.py to adjust thresholds — the code reads this file at runtime."
+  },
+
+  "global_guards": {
+    "min_confidence_for_hard_verdict": 0.55,
+    "boundary_margin_default_deg": 10.0,
+    "notes": [
+      "min_confidence: readings below this always yield NEEDS_REVIEW, regardless of angle value.",
+      "boundary_margin_default_deg: measurements within this distance of any threshold boundary yield NEEDS_REVIEW.",
+      "10° margin is calibrated from the cross-engine validation study (hip_extension_validation_2d.py), which found a mean absolute disagreement of 11.1° between BlazePose (MediaPipe) and RTMPose-m (Sports2D) in 2D image-coordinate space.",
+      "24fps clips add an additional ±5-10° timing error at toe-off; this is absorbed by the same margin.",
+      "Per SME brief D3: never force a hard DISQUALIFY verdict on weak or insufficient input."
+    ]
+  },
+
+  "patterns": {
+
+    "A1_hip_extension_at_toeoff": {
+      "display_name": "Pattern A1 — Hip Extension at Toe-Off",
+      "description": "Peak included hip angle (Knee–Hip–Shoulder, arccos convention) at the instant of toe-off during full-speed running. 180° = fully extended limb; angle decreases as the hip bends.",
+      "measurement_script": "hip_extension_analysis.py",
+      "output_file": "hip_extension_output/hip_extension_results.json",
+      "unit": "degrees_included_angle",
+      "status": "PROVISIONAL_NOT_VALIDATED",
+      "source_document": "SME Brief, Pattern A1",
+
+      "thresholds": {
+        "qualify_min_deg": 160.0,
+        "disqualify_max_deg": 145.0,
+        "boundary_margin_deg": 10.0,
+        "clear_qualify_zone_deg": 170.0,
+        "clear_disqualify_zone_deg": 135.0,
+        "min_confidence": 0.55,
+
+        "label_map": {
+          "FULL_EXTENSION": "expected_qualify",
+          "PARTIAL":        "expected_needs_review",
+          "RESTRICTED":     "expected_disqualify",
+          "UNDETECTABLE":   "needs_review_quality_insufficient"
+        },
+
+        "zone_explanation": {
+          "QUALIFY (clear)":      "measured_value >= clear_qualify_zone_deg (170°) — more than one margin above threshold",
+          "NEEDS_REVIEW (boundary)": "measured_value within boundary_margin_deg (10°) of either threshold",
+          "PARTIAL (always NEEDS_REVIEW)": "SME brief does not assign PARTIAL a definitive screening outcome",
+          "DISQUALIFY (clear)":   "measured_value <= clear_disqualify_zone_deg (135°) — more than one margin below threshold"
+        },
+
+        "status": "PROVISIONAL_NOT_VALIDATED"
+      },
+
+      "validation_notes": [
+        "Cross-engine MAD = 11.1° (2D pixel-space comparison, hip_extension_validation_2d.py) — supports 10° boundary margin.",
+        "24fps timing: ±42ms/frame → ~5-10° hip-angle error at toe-off; absorbed within the same 10° margin.",
+        "SME brief D3: quality-insufficient or implausible readings must be NEEDS_REVIEW, not DISQUALIFY.",
+        "PARTIAL maps to NEEDS_REVIEW because the SME brief does not assign it a definitive screening outcome.",
+        "NFL combine validation required before any threshold is used operationally."
+      ]
+    }
+
+  }
+}
